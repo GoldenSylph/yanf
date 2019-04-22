@@ -1,26 +1,32 @@
+require('dotenv').config();
+const HDWalletProvider = require('truffle-hdwallet-provider');
+
 module.exports = {
-  // Uncommenting the defaults below
-  // provides for an easier quick-start with Ganache.
-  // You can also follow this format for other networks;
-  // see <http://truffleframework.com/docs/advanced/configuration>
-  // for more details on how to specify configuration options!
-  /*
   networks: {
     development: {
       host: "127.0.0.1",
       port: 7545,
-      network_id: "*"
+      network_id: "*" // Match any network id
     },
-    test: {
-      host: "127.0.0.1",
-      port: 7545,
-      network_id: "*"
+    kovan: {
+      provider: function() {
+        return new HDWalletProvider(
+          process.env.MNEMONIC,
+          `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`
+        )
+      },
+      gas: 7900000,
+      gasPrice: 1000000000,
+      network_id: 42
     }
-  }
-  */
+  },
   compilers: {
     solc: {
-      version: "^0.5.2"
+      version: "^0.5.2",
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
     }
   }
 };

@@ -1,0 +1,34 @@
+{
+  "name": "blockchain-toolkit",
+  "version": "1.0.0",
+  "description": "The Complete Blockchain Developer Toolkit for 2019 & Beyond",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && sexit 1"
+  },
+  "author": "numeralhuman@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "bootstrap": "4.1.3",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^2.0.2",
+    "dotenv": "^4.0.0",
+    "ganache-cli": "^6.2.5",
+    "lite-server": "^2.3.0",
+    "nodemon": "^1.17.3",
+    "openzeppelin-solidity": "^2.2.0",
+    "solidity-coverage": "^0.5.11",
+    "truffle": "5.0.0-beta.0",
+    "truffle-contract": "3.0.6",
+    "truffle-hdwallet-provider": "^1.0.0-web3one.0"
+  },
+  "dependencies": {
+    "jquery": "^1.9.1",
+    "popper.js": "^1.14.3"
+  }
+}
