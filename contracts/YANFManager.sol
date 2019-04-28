@@ -30,16 +30,29 @@ contract YANFManager is Ownable, Pausable {
   uint private feedsCount = 0;
 
   uint private constant MAX_WINDOW = 1000;
-
   uint public constant fee = 1 finney;
 
-  address payable feeReceiver;
+  address payable feeHolder;
 
   YANFToken private tokenContract =
     new YANFToken("Yet Another News Feed Token", "YANF", 18);
 
-  function setFeeReceiver(address payable who) public onlyOwner whenNotPaused {
-    feeReceiver = who;
+  function setFeeReceiver(address payable who)
+    public
+    onlyOwner
+    whenNotPaused
+  {
+    feeHolder = who;
+  }
+
+  function getFeeReceiver()
+    public
+    view
+    onlyOwner
+    whenNotPaused
+    returns(address)
+  {
+    return feeHolder;
   }
 
   function publish(string memory title, string memory content_hash, address[] memory coauthors, uint[] memory parts, uint price)
@@ -85,7 +98,7 @@ contract YANFManager is Ownable, Pausable {
     if (feeds[feedIndexOfSender].articles[articleIndex].coauthors[who] == 0) {
       uint oldCoauthorsCount = feeds[feedIndexOfSender].articles[articleIndex].coauthorsCount;
       feeds[feedIndexOfSender].articles[articleIndex].coauthorsCount = SafeMath.add(oldCoauthorsCount, 1);
-      feeds[feedIndexOfSender].articles[articleIndex].coauthorsRanks[who] = oldCoauthorsCount;
+      feeds[feedIndexOfSender].articles[articleIndex].coauthorsRanks[oldCoauthorsCount] = who;
     }
     feeds[feedIndexOfSender].articles[articleIndex].coauthors[who] = part;
     return true;
@@ -105,12 +118,8 @@ contract YANFManager is Ownable, Pausable {
     uint[] memory resultFeedsIndexes = new uint[](MAX_WINDOW);
     uint currentArticleIndexCount = 0;
     uint currentFeedIndexCount = 0;
-
-    uint maxFeedIterations = SafeMath.sub(feedsCount, 1);
-    uint maxArticleIterations = feeds[i].articlesCount;
-
-    for (uint i = 0; i <= maxFeedIterations; i = SafeMath.add(i, 1)) {
-      for (uint j = 0; j < maxArticleIterations; j = SafeMath.add(j, 1)) {
+    for (uint i = 0; i <= SafeMath.sub(feedsCount, 1); i = SafeMath.add(i, 1)) {
+      for (uint j = 0; j < feeds[i].articlesCount; j = SafeMath.add(j, 1)) {
         if (
           (stringEquals(feeds[i].articles[j].title, title) && titlePredicate) ||
           (articleHasEqualOrLesserPrice(i, j, price) && pricePredicate) ||
@@ -119,14 +128,14 @@ contract YANFManager is Ownable, Pausable {
           resultFeedsIndexes[currentFeedIndexCount] = i;
           currentFeedIndexCount = SafeMath.add(currentFeedIndexCount, 1);
           if (currentFeedIndexCount > MAX_WINDOW) {
-            i = SafeMath.add(maxFeedIterations, 1);
-            j = SafeMath.add(maxArticleIterations, 1);
+            i = feedsCount;
+            j = SafeMath.add(feeds[i].articlesCount, 1);
           }
           resultArticlesIndexes[currentArticleIndexCount] = j;
           currentArticleIndexCount = SafeMath.add(currentArticleIndexCount, 1);
           if (currentArticleIndexCount > MAX_WINDOW) {
-            i = SafeMath.add(maxFeedIterations, 1);
-            j = SafeMath.add(maxArticleIterations, 1);
+            i = feedsCount;
+            j = SafeMath.add(feeds[i].articlesCount, 1);
           }
         }
       }
@@ -144,21 +153,24 @@ contract YANFManager is Ownable, Pausable {
   }
 
   function sendContractFees()
-    onlyOwner
     public
+    onlyOwner
     whenNotPaused
     returns(bool)
   {
-    feeReceiver.transfer(address(this).balance);
+    feeHolder.transfer(address(this).balance);
     return true;
   }
 
-  function buy(uint feed, uint article)
+  function buy(address author, uint feed, uint article)
     public
     payable
     whenNotPaused
     returns(bool)
   {
+    if (feedsIndexes[author] != feed) {
+      return false;
+    }
     if (!feeds[feed].initialized || !feeds[feed].articles[article].initialized) {
       return false;
     }
@@ -172,7 +184,7 @@ contract YANFManager is Ownable, Pausable {
           authorPrice = SafeMath.sub(authorPrice, currentCoauthorPrice);
           tokenContract.mint(feeds[feed].articles[article].coauthorsRanks[i], currentCoauthorPrice);
         }
-        tokenContract.mint(msg.sender, authorPrice);
+        tokenContract.mint(author, authorPrice);
         return true;
       } else {
         return false;
@@ -196,7 +208,7 @@ contract YANFManager is Ownable, Pausable {
 
   function stringEquals(string memory a, string memory b)
     private
-    pure
+    view
     whenNotPaused
     returns(bool)
   {

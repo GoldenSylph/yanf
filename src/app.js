@@ -41,6 +41,7 @@ App = {
     // Non-dapp browsers...
     else {
       console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
+      window.alert("Non-Ethereum browser detected. You should consider trying MetaMask!")
     }
   },
 
@@ -48,6 +49,8 @@ App = {
 
     const YANFManagerContractJSON = await $.getJSON('YANFManager.json');
     const YANFNameSystemContractJSON = await $.getJSON('YANFNameSystem.json');
+    App.contracts.YANFManager = TruffleContract(YANFManagerContractJSON);
+    App.contracts.YANFNameSystem = TruffleContract(YANFNameSystemContractJSON);
     // const contract = await $.getJSON('BasicContract.json')
     // App.contracts.MyContract = TruffleContract(contract)
     // App.contracts.MyContract.setProvider(App.web3Provider)
