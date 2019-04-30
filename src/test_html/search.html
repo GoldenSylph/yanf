@@ -3,23 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Yet Another News Feed</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        .name{
+            width: 270px;
+            height:80px;
+            margin: 5%;
+    }
+    </style>
 </head>
 <body style = "background-color: #E6F6FFFF">
 <body>
+    <div class="name">
+        <img src="Name.png" title="YANF" align="right">
+    </div>
     <h1></h1>
     <form action="" method="post">
         <input type="text" name="search" id="search" placeholder="Search(tags,keywords,etc)">
     <p>
          <select name="type">
-            <option value="">Choose filter</option>
+            <option value="-">Choose filter</option>
             <option value="feed">Feed search</option>
             <option value="article">Article search</option>
             <option value="author">Author search</option>
         </select>
     </p>            
     <p>
-        <input type="submit" name="search" id="search" value="Search">
+        <input type="submit" name="search" id="search" value="Search" title="Search article">
     </p>
 </body>
 </html>
