@@ -55,7 +55,8 @@ contract YANFManager is Ownable, Pausable {
     return feeHolder;
   }
 
-  function publish(string memory title, string memory content_hash, address[] memory coauthors, uint[] memory parts, uint price)
+  function publish(string memory title, string memory content_hash,
+      address[] memory coauthors, uint[] memory parts, uint price)
     public
     whenNotPaused
     returns(bool)
@@ -106,41 +107,31 @@ contract YANFManager is Ownable, Pausable {
 
   function searchArticlesByChosenPredicate
     (
+      uint feedIndex, uint articleOffset,
       string memory title, uint price, address coauthor,
       bool titlePredicate, bool pricePredicate, bool coauthorPredicate
     )
     public
     view
     whenNotPaused
-    returns(uint[] memory resArticlesIndexes, uint[] memory resFeedsIndexes)
+    returns(uint[] memory)
   {
     uint[] memory resultArticlesIndexes = new uint[](MAX_WINDOW);
-    uint[] memory resultFeedsIndexes = new uint[](MAX_WINDOW);
     uint currentArticleIndexCount = 0;
-    uint currentFeedIndexCount = 0;
-    for (uint i = 0; i <= SafeMath.sub(feedsCount, 1); i = SafeMath.add(i, 1)) {
-      for (uint j = 0; j < feeds[i].articlesCount; j = SafeMath.add(j, 1)) {
-        if (
-          (stringEquals(feeds[i].articles[j].title, title) && titlePredicate) ||
-          (articleHasEqualOrLesserPrice(i, j, price) && pricePredicate) ||
-          (articleContainsCoauthor(i, j, coauthor) && coauthorPredicate)
-        ) {
-          resultFeedsIndexes[currentFeedIndexCount] = i;
-          currentFeedIndexCount = SafeMath.add(currentFeedIndexCount, 1);
-          if (currentFeedIndexCount > MAX_WINDOW) {
-            i = feedsCount;
-            j = SafeMath.add(feeds[i].articlesCount, 1);
-          }
-          resultArticlesIndexes[currentArticleIndexCount] = j;
-          currentArticleIndexCount = SafeMath.add(currentArticleIndexCount, 1);
-          if (currentArticleIndexCount > MAX_WINDOW) {
-            i = feedsCount;
-            j = SafeMath.add(feeds[i].articlesCount, 1);
-          }
+    for (uint j = articleOffset; j < feeds[feedIndex].articlesCount; j = SafeMath.add(j, 1)) {
+      if (
+        (stringEquals(feeds[feedIndex].articles[j].title, title) && titlePredicate) ||
+        (articleHasEqualOrLesserPrice(feedIndex, j, price) && pricePredicate) ||
+        (articleContainsCoauthor(feedIndex, j, coauthor) && coauthorPredicate)
+      ) {
+        resultArticlesIndexes[currentArticleIndexCount] = j;
+        currentArticleIndexCount = SafeMath.add(currentArticleIndexCount, 1);
+        if (currentArticleIndexCount > MAX_WINDOW) {
+          j = SafeMath.add(feeds[feedIndex].articlesCount, 1);
         }
       }
     }
-    return (resultArticlesIndexes, resultFeedsIndexes);
+    return resultArticlesIndexes;
   }
 
   function searchFeedByAuthor(address author)
@@ -206,6 +197,58 @@ contract YANFManager is Ownable, Pausable {
     tokenContract.burnFrom(msg.sender, tokenContract.balanceOf(msg.sender));
   }
 
+  function getArticleTitle(uint feedIndex, uint articleIndex)
+    public
+    view
+    whenNotPaused
+    returns(string memory)
+  {
+    return feeds[feedIndex].articles[articleIndex].title;
+  }
+
+  function getArticleContentHash(uint feedIndex, uint articleIndex)
+    public
+    view
+    whenNotPaused
+    returns(string memory)
+  {
+    if (feedsIndexes[msg.sender] == feedIndex
+      || isCustomerInArticle(feedIndex, articleIndex, msg.sender)
+      || feeds[feedIndex].articles[articleIndex].coauthors[msg.sender] > 0
+    ) {
+      return feeds[feedIndex].articles[articleIndex].content_hash;
+    } else {
+      return "FORBIDDEN";
+    }
+  }
+
+  function getArticlePrice(uint feedIndex, uint articleIndex)
+    public
+    view
+    whenNotPaused
+    returns(uint)
+  {
+    return feeds[feedIndex].articles[articleIndex].price;
+  }
+
+  function getArticleCoauthorsCount(uint feedIndex, uint articleIndex)
+    public
+    view
+    whenNotPaused
+    returns(uint)
+  {
+    return feeds[feedIndex].articles[articleIndex].coauthorsCount;
+  }
+
+  function getArticleCoauthor(uint feedIndex, uint articleIndex, uint coauthorRank)
+    public
+    view
+    whenNotPaused
+    returns(address)
+  {
+    return feeds[feedIndex].articles[articleIndex].coauthorsRanks[coauthorRank];
+  }
+
   function stringEquals(string memory a, string memory b)
     private
     view
@@ -233,4 +276,17 @@ contract YANFManager is Ownable, Pausable {
     return feeds[feed].articles[article].price <= price;
   }
 
+  function isCustomerInArticle(uint feedIndex, uint articleIndex, address customer)
+    private
+    view
+    whenNotPaused
+    returns(bool)
+  {
+    for (uint i = 0; i < feeds[feedIndex].articles[articleIndex].customersCount; i = SafeMath.add(i, 1)) {
+      if (feeds[feedIndex].articles[articleIndex].customers[i] == customer) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

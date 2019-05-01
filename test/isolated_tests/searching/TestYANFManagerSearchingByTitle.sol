@@ -32,6 +32,7 @@ contract TestYANFManagerSearchingByTitle {
     parts.push(price / 3);
 
     manager.publish(title, contentHash, coauthors, parts, price);
+    
   }
 
 }

@@ -28,6 +28,7 @@
     "truffle-hdwallet-provider": "^1.0.0-web3one.0"
   },
   "dependencies": {
+    "ipfs-http-client": "^30.1.4",
     "jquery": "^1.9.1",
     "popper.js": "^1.14.3"
   }
