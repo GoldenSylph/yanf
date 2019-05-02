@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Yet another news feed</title>
+    <title>YANF</title>
 
     <!-- Bootstrap -->
     <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,14 +22,14 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-      <a class="navbar-brand" href="#">Yet another news feed</a>
+      <a id="logo_name" class="navbar-brand" href="#">Yet another novel feed</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Viewing author: <span id="viewing_author"></a>
+            <a class="nav-link disabled" href="#">Viewing: <span id="viewing_author"></a>
           </li>
           <li class="nav-item">
             <button class="btn" style="display: none;" onclick="App.topFunction();" id="toTopBtn" title="Go to top">Go to top</button>
@@ -41,8 +41,10 @@
         </form>
         <div class="col-sm-2">
           <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#publishModal">
-            Publish news
+            Publish page
           </button>
+        </div>
+        <div id="admin" class="col-sm-0">
         </div>
       </div>
     </nav>
@@ -72,6 +74,11 @@
                           <input type="text" class="form-control" id="title" aria-describedby="title_help" placeholder="Enter title">
                           <small id="title_help" class="form-text text-muted">Below you can use markdown markup language</small>
                         </div>
+                        <div class="form-group">
+                          <label for="price">You can also provide the price for this article.</label>
+                          <input type="text" class="form-control" id="price" aria-describedby="price_help" placeholder="Enter price in ether">
+                          <small id="price_help" class="form-text text-muted">You can make it free, just set up to zero</small>
+                        </div>
                         <textarea id="article_content" class="form-control" aria-label="With textarea"></textarea>
                         <script>
                           var simplemde = new SimpleMDE({ element: document.getElementById("article_content") });
@@ -84,6 +91,38 @@
                   </div>
                 </div>
               </div>
+
+              <div class="modal fade" id="adminModal" tabindex="-1" role="dialog" aria-labelledby="adminModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="adminModalTitle">Admin settings</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="sendFeesForm" onSubmit="App.sendFees(); return false;" role="form">
+                        <div class="form-group">
+                          <label id="currentBalance" for="feeReceiverInput">Current balance of the contract is: Loading...</label>
+                          <input type="text" class="form-control" id="feeReceiverInput" aria-describedby="feeReceiverInput_help" placeholder="Fee receiver address">
+                          <small id="feeReceiverInput_help" class="form-text text-muted">It can be only payable address</small>
+                        </div>
+                        <div class="form-group">
+                          <label for="feeAmountInput">You can specify amount of ether to send</label>
+                          <input type="text" class="form-control" id="feeAmountInput" aria-describedby="feeAmountInput_help" placeholder="Amount in ether">
+                          <small id="feeAmountInput_help" class="form-text text-muted">Use wisely</small>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-warning">Send</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
               <hr class="my-4">
               <div id="article_container">
               </div>
