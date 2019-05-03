@@ -1,7 +1,7 @@
 {
-  "name": "blockchain-toolkit",
+  "name": "yet-another-novel-feed",
   "version": "1.0.0",
-  "description": "The Complete Blockchain Developer Toolkit for 2019 & Beyond",
+  "description": "The feed where you can publish your novels and make money from it",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -13,7 +13,7 @@
   "author": "numeralhuman@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "bootstrap": "4.1.3",
+    "bootstrap": ">=4.3.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^2.0.2",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "ipfs-http-client": "^30.1.4",
-    "jquery": "^1.9.1",
+    "jquery": ">=3.4.0",
     "popper.js": "^1.14.3"
   }
 }

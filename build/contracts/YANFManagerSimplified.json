@@ -10948,10 +10948,148 @@
       "links": {},
       "address": "0x8f9D7839606D9B2D42090E76631b336268841fCC",
       "transactionHash": "0xccb8aab5c2ed1ec028619984c91014d30b579815048023fa22bdce77319bafa5"
+    },
+    "1556877714272": {
+      "events": {
+        "0x0f2d6eb573101f00def996d1097900ac011ed4a57c0f389fdc02fb24ca6d04e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "feedOwner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "articleIndex",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "result",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "givenAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "Bought",
+          "type": "event",
+          "signature": "0x0f2d6eb573101f00def996d1097900ac011ed4a57c0f389fdc02fb24ca6d04e0"
+        },
+        "0x039d3e7ccc0d8edf3fb8206bf9f58888c4cced8c157c730a2407a54aad7c865c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "who",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "success",
+              "type": "bool"
+            }
+          ],
+          "name": "Withdraw",
+          "type": "event",
+          "signature": "0x039d3e7ccc0d8edf3fb8206bf9f58888c4cced8c157c730a2407a54aad7c865c"
+        },
+        "0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Paused",
+          "type": "event",
+          "signature": "0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258"
+        },
+        "0x5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Unpaused",
+          "type": "event",
+          "signature": "0x5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa"
+        },
+        "0x6719d08c1888103bea251a4ed56406bd0c3e69723c8a1686e017e7bbe159b6f8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "PauserAdded",
+          "type": "event",
+          "signature": "0x6719d08c1888103bea251a4ed56406bd0c3e69723c8a1686e017e7bbe159b6f8"
+        },
+        "0xcd265ebaf09df2871cc7bd4133404a235ba12eff2041bb89d9c714a2621c7c7e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "PauserRemoved",
+          "type": "event",
+          "signature": "0xcd265ebaf09df2871cc7bd4133404a235ba12eff2041bb89d9c714a2621c7c7e"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0xa5825b2967A7FF0888692c401e4b74baca83B8E4",
+      "transactionHash": "0xf34f5d1a8eca3b1f0d2f417620a4851627c1dc4701c2197b5f06406acc1b1407"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-03T09:33:29.771Z",
+  "updatedAt": "2019-05-03T10:10:53.739Z",
   "devdoc": {
     "methods": {
       "isOwner()": {

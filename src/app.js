@@ -358,6 +358,7 @@ App = {
         });
 
       const elem = author + '-' + articleIndex;
+      articleContent = App.converter.makeHtml(articleContent);
       $('#' + elem).html(App.wrapToHTML(author, ipfsLink, articleTitle, articleContent, price, articleIndex));
       App.updateYanfBalance();
     }
