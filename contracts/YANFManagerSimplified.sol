@@ -19,24 +19,35 @@ contract YANFManagerSimplified is Ownable, Pausable {
   }
 
   event Bought(address feedOwner, uint articleIndex, address sender, bool result, uint price, uint givenAmount);
+  event Withdraw(address who, uint amount, bool success);
 
-  mapping(address => Feed) public feeds;
+  mapping(address => Feed) private feeds;
 
   mapping(address => mapping(address => mapping(uint => bool))) customers;
 
+  mapping(address => uint) balances;
+
   uint private publishPrice = 1 finney;
 
-  YANFToken private tokenContract =
-    new YANFToken("Yet Another News Feed Token", "YANF", 18);
-
-
-  function sendFees(address payable who, uint amount)
+  function getYanfBalance()
     public
-    onlyOwner
+    view
+    returns(uint)
   {
-    who.transfer(amount);
+    return balances[msg.sender];
   }
 
+  function withdraw(uint amount)
+    public
+  {
+    if (amount <= balances[msg.sender]) {
+      balances[msg.sender] = SafeMath.sub(balances[msg.sender], amount);
+      msg.sender.transfer(amount);
+      emit Withdraw(msg.sender, amount, true);
+    } else {
+      emit Withdraw(msg.sender, amount, false);
+    }
+  }
 
   function getArticleCount(address feedOwner)
     public
@@ -74,6 +85,7 @@ contract YANFManagerSimplified is Ownable, Pausable {
     if (msg.value >= price && price > 0) {
       customers[msg.sender][feedOwner][index] = true;
       emit Bought(feedOwner, index, msg.sender, true, price, msg.value);
+      balances[feedOwner] = SafeMath.add(balances[feedOwner], msg.value);
     }
     emit Bought(feedOwner, index, msg.sender, false, price, msg.value);
   }
@@ -94,8 +106,13 @@ contract YANFManagerSimplified is Ownable, Pausable {
     if (msg.value < publishPrice) {
       return false;
     }
+    if (price > 0) {
+      customers[msg.sender][msg.sender][feeds[msg.sender].articleCount] = true;
+    }
     feeds[msg.sender].articles[feeds[msg.sender].articleCount] = Article(title, contentHash, price);
     feeds[msg.sender].articleCount = SafeMath.add(feeds[msg.sender].articleCount, 1);
+    balances[owner()] = SafeMath.add(balances[owner()], msg.value);
+    return true;
   }
 
   function () external payable {}

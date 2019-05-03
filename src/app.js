@@ -44,25 +44,67 @@ App = {
     App.contracts.YANFManagerSimplified.setProvider(App.web3Provider);
   },
 
-  sendFees: async () => {
-    const feeReceiver = $('#feeReceiverInput').val();
-    const feeAmount = $('#feeAmountInput').val();
-
-    if (feeReceiver == null || feeReceiver === ''
-        || feeAmount == null || feeAmount === '' || feeAmount <= 0) {
+  widthdraw: async() => {
+    var amount = $('#widthdrawInput').val();
+    if (amount == null || amount === '' || amount < 0) {
       return;
     }
-
+    amount = web3.toWei(amount, 'ether');
     await App.contracts.YANFManagerSimplified.deployed()
       .then((instance) => {
-        return instance.sendFees(feeReceiver, web3.toWei(feeAmount, 'ether'), {from: App.account});
+        return instance.withdraw(amount, {from: App.account});
       })
       .then((result) => {
-        window.alert('Revenue sent.');
+        window.alert('Withdraw complete.');
       })
       .catch((error) => {
         console.log('An error occurred during the connection: ' + error);
-        window.alert('Sorry, can not send revenue. Please reload the page.');
+        window.alert('Sorry, you can not withdraw now. Please reload the page or contact to us so we can help you.');
+      });
+
+    const instanceTemp = await App.contracts.YANFManagerSimplified.deployed();
+    const withdrawEvent = instanceTemp.Withdraw({});
+    withdrawEvent.watch(async (err, result) => {
+      console.log("widthdraw event emit: who: " + result.args.who + ", " +
+          "amount: " + result.args.amount + ", success: " + result.args.success);
+      withdrawEvent.stopWatching();
+    });
+
+  },
+
+  // sendFees: async () => {
+  //   const feeReceiver = $('#feeReceiverInput').val();
+  //   const feeAmount = $('#feeAmountInput').val();
+  //
+  //   if (feeReceiver == null || feeReceiver === ''
+  //       || feeAmount == null || feeAmount === '' || feeAmount <= 0) {
+  //     return;
+  //   }
+  //
+  //   await App.contracts.YANFManagerSimplified.deployed()
+  //     .then((instance) => {
+  //       return instance.sendFees(feeReceiver, web3.toWei(feeAmount, 'ether'), {from: App.account});
+  //     })
+  //     .then((result) => {
+  //       window.alert('Revenue sent.');
+  //     })
+  //     .catch((error) => {
+  //       console.log('An error occurred during the connection: ' + error);
+  //       window.alert('Sorry, can not send revenue. Please reload the page.');
+  //     });
+  // },
+
+  updateYanfBalance: async() => {
+    await App.contracts.YANFManagerSimplified.deployed()
+      .then((instance) => {
+        return instance.getYanfBalance.call({from: App.account});
+      })
+      .then((result) => {
+        $('#currentYANFBalance').html('Your current balance is: ' + web3.fromWei(result, 'ether') + ' YANF');
+      })
+      .catch((error) => {
+        console.log('An error occurred during the connection: ' + error);
+        window.alert('Sorry, we can not obtain your current YANF balance. Please reload the page.');
       });
   },
 
@@ -74,28 +116,31 @@ App = {
     App.account = web3.eth.accounts[0];
     $('#viewing_author').html(App.account);
     await App.searchBy(App.account);
+
     await web3.eth.getBalance(App.contracts.YANFManagerSimplified.address, (err, balance) => {
       $('#currentBalance').html('Current balance of the contract is: '
         + web3.fromWei(balance, 'ether') + ' ETH');
     });
 
-    await App.contracts.YANFManagerSimplified.deployed()
-      .then((instance) => {
-        return instance.isOwner.call({from: App.account});
-      })
-      .then((result) => {
-        if (result) {
-          $('#admin').html(
-            "<button type=\"button\" class=\"btn btn-danger form-control\"" +
-            "data-toggle=\"modal\" data-target=\"#adminModal\">" +
-            "Admin" +
-          "</button>");
-        }
-      })
-      .catch((error) => {
-        console.log('An error occurred during the connection: ' + error);
-        window.alert('Sorry, the connection is failed. Please reload the page.');
-      });
+    App.updateYanfBalance();
+
+    // await App.contracts.YANFManagerSimplified.deployed()
+    //   .then((instance) => {
+    //     return instance.isOwner.call({from: App.account});
+    //   })
+    //   .then((result) => {
+    //     if (result) {
+    //       $('#admin').html(
+    //         "<button type=\"button\" class=\"btn btn-danger form-control\"" +
+    //         "data-toggle=\"modal\" data-target=\"#adminModal\">" +
+    //         "Admin" +
+    //       "</button>");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log('An error occurred during the connection: ' + error);
+    //     window.alert('Sorry, the connection is failed. Please reload the page.');
+    //   });
 
     App.setLoading(false);
   },
@@ -139,7 +184,7 @@ App = {
         console.log('An error occurred during the publishing: ' + error);
         window.alert('Sorry, your article was not published. You can contact to us, so we could help you.');
       });
-
+    App.updateYanfBalance();
     $('#publishModal').modal('hide');
   },
 
@@ -155,6 +200,7 @@ App = {
     }
 
     App.setLoading(true);
+    $('#article_container').html('');
     const authorAddress = authorAddr;
 
     var articlesCount = 0;
@@ -264,7 +310,7 @@ App = {
     })
     .then((result) => {
       App.buying_result = result;
-      window.alert("Buying, standby...");
+      window.alert("You successfully bought the page!");
       bought = true;
     })
     .catch((error) => {
@@ -313,6 +359,7 @@ App = {
 
       const elem = author + '-' + articleIndex;
       $('#' + elem).html(App.wrapToHTML(author, ipfsLink, articleTitle, articleContent, price, articleIndex));
+      App.updateYanfBalance();
     }
 
   },

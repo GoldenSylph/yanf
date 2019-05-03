@@ -29,7 +29,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Viewing: <span id="viewing_author"></a>
+            <a class="nav-link disabled" href="#">Viewing author: <span id="viewing_author"></a>
           </li>
           <li class="nav-item">
             <button class="btn" style="display: none;" onclick="App.topFunction();" id="toTopBtn" title="Go to top">Go to top</button>
@@ -44,7 +44,12 @@
             Publish page
           </button>
         </div>
-        <div id="admin" class="col-sm-0">
+        <!-- <div id="admin" class="col-sm-0">
+        </div> -->
+        <div class="col-sm-0">
+          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#profileModal">
+            Profile
+          </button>
         </div>
       </div>
     </nav>
@@ -91,8 +96,8 @@
                   </div>
                 </div>
               </div>
-
-              <div class="modal fade" id="adminModal" tabindex="-1" role="dialog" aria-labelledby="adminModalTitle" aria-hidden="true">
+<!-- ######################################################################################### -->
+              <!-- <div class="modal fade" id="adminModal" tabindex="-1" role="dialog" aria-labelledby="adminModalTitle" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -115,6 +120,31 @@
                         </div>
                         <div class="modal-footer">
                           <button type="submit" class="btn btn-warning">Send</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+<!-- ######################################################################################### -->
+              <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="profileModalTitle">Profile</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="widthdrawForm" onSubmit="App.widthdraw(); return false;" role="form">
+                        <div class="form-group">
+                          <label id="currentYANFBalance" for="widthdrawInput">Your current balance is: Loading...</label>
+                          <input type="text" class="form-control" id="widthdrawInput" aria-describedby="widthdrawInput_help" placeholder="Enter amount in YANF">
+                          <small id="widthdrawInput_help" class="form-text text-muted">1 YANF is equal to 1 ETH.</small>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-success">Withdraw</button>
                         </div>
                       </form>
                     </div>
