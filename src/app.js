@@ -72,28 +72,6 @@ App = {
 
   },
 
-  // sendFees: async () => {
-  //   const feeReceiver = $('#feeReceiverInput').val();
-  //   const feeAmount = $('#feeAmountInput').val();
-  //
-  //   if (feeReceiver == null || feeReceiver === ''
-  //       || feeAmount == null || feeAmount === '' || feeAmount <= 0) {
-  //     return;
-  //   }
-  //
-  //   await App.contracts.YANFManagerSimplified.deployed()
-  //     .then((instance) => {
-  //       return instance.sendFees(feeReceiver, web3.toWei(feeAmount, 'ether'), {from: App.account});
-  //     })
-  //     .then((result) => {
-  //       window.alert('Revenue sent.');
-  //     })
-  //     .catch((error) => {
-  //       console.log('An error occurred during the connection: ' + error);
-  //       window.alert('Sorry, can not send revenue. Please reload the page.');
-  //     });
-  // },
-
   updateYanfBalance: async() => {
     await App.contracts.YANFManagerSimplified.deployed()
       .then((instance) => {
@@ -123,25 +101,6 @@ App = {
     });
 
     App.updateYanfBalance();
-
-    // await App.contracts.YANFManagerSimplified.deployed()
-    //   .then((instance) => {
-    //     return instance.isOwner.call({from: App.account});
-    //   })
-    //   .then((result) => {
-    //     if (result) {
-    //       $('#admin').html(
-    //         "<button type=\"button\" class=\"btn btn-danger form-control\"" +
-    //         "data-toggle=\"modal\" data-target=\"#adminModal\">" +
-    //         "Admin" +
-    //       "</button>");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log('An error occurred during the connection: ' + error);
-    //     window.alert('Sorry, the connection is failed. Please reload the page.');
-    //   });
-
     App.setLoading(false);
   },
 
