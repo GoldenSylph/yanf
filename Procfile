@@ -1,1 +1,1 @@
-web: lite-server
+web: node index.js
