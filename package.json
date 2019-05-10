@@ -13,23 +13,27 @@
   "author": "numeralhuman@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "bootstrap": ">=4.3.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^2.0.2",
-    "dotenv": "^4.0.0",
     "ganache-cli": "^6.2.5",
     "lite-server": "^2.3.0",
-    "nodemon": "^1.17.3",
-    "openzeppelin-solidity": "^2.2.0",
-    "solidity-coverage": "^0.5.11",
-    "truffle": "5.0.0-beta.0",
-    "truffle-contract": "3.0.6",
-    "truffle-hdwallet-provider": "^1.0.0-web3one.0"
+    "nodemon": "^1.17.3"
   },
   "dependencies": {
     "ipfs-http-client": "^30.1.4",
     "jquery": ">=3.4.0",
-    "popper.js": "^1.14.3"
+    "popper.js": "^1.14.3",
+    "bootstrap": ">=4.3.1",
+    "dotenv": "^4.0.0",
+    "openzeppelin-solidity": "^2.2.0",
+    "solidity-coverage": "^0.5.11",
+    "truffle": "5.0.0-beta.0",
+    "truffle-contract": "3.0.6",
+    "truffle-hdwallet-provider": "^1.0.0-web3one.0",
+    "express": "^4.9.8"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
