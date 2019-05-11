@@ -3,7 +3,6 @@ pragma solidity ^0.5.2;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./YANFToken.sol";
 
 contract YANFManagerSimplified is Ownable, Pausable {
 
