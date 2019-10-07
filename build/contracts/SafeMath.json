@@ -3278,8 +3278,8 @@
     "42": {
       "events": {},
       "links": {},
-      "address": "0xcbd5de977Efd640C27FD69F98d2433DEdcFEdC27",
-      "transactionHash": "0xeafad999228197c1d0fab7b9808ffad942719baeb82890291d042743793f79b0"
+      "address": "0x99C8481a39E1E83439D54791899DFD3862df7503",
+      "transactionHash": "0xcc5dc38abc2f0aabccfff33d66b846565f01d1b1dff4bad9c6f9dd3d8eb78956"
     },
     "5777": {
       "events": {},
@@ -3319,7 +3319,7 @@
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-11T18:03:51.380Z",
+  "updatedAt": "2019-05-31T14:28:48.659Z",
   "devdoc": {
     "details": "Unsigned math operations with safety checks that revert on error",
     "methods": {},

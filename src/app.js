@@ -41,6 +41,7 @@ App = {
 
     const YANFManagerSimplifiedContractJSON = await $.getJSON('YANFManagerSimplified.json');
     App.contracts.YANFManagerSimplified = TruffleContract(YANFManagerSimplifiedContractJSON);
+    console.log('Provider', App.web3Provider);
     App.contracts.YANFManagerSimplified.setProvider(App.web3Provider);
   },
 
