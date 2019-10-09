@@ -14,6 +14,7 @@ app.get('/', function (req, res) {
 app.listen(port, async function() {
   const node = await IPFS.create();
   node.on('error', errorObject => console.error(errorObject));
-  node.on('ready', () => console.log('IPFS node is ready'))
+  node.on('ready', () => console.log('IPFS node is ready'));
+  console.log(`Node is created ${node}`);
   console.log(`Listening on port ${port}!`);
 });
