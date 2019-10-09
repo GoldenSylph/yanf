@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-
+const IPFS = require('ipfs');
 const port = process.env.PORT;
 
 app.use(express.static('src'));
@@ -12,5 +12,10 @@ app.get('/', function (req, res) {
 });
 
 app.listen(port, function(){
-  console.log("Listening on port ${port}!")
+  const node = IPFS.create().then((result) => {
+    console.log("Created IPFS node ${node} with result ${result}");
+  });
+  node.on('error', errorObject => console.error(errorObject));
+  node.on('ready', () => console.log("ipfs node is ready to use..."))
+  console.log("Listening on port ${port}!");
 });

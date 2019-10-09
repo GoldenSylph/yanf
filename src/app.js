@@ -36,7 +36,14 @@ App = {
   },
 
   initAll: async () => {
-    App.ipfs = window.IpfsHttpClient({host: 'ipfs.infura.io', port: '5001', protocol: 'https'});
+    App.ipfs = window.IpfsHttpClient({host: 'localhost', port: '5002', protocol: 'http'});
+    App.ipfs.id((err, identity) => {
+      if (err) {
+        throw err
+      }
+      console.log(identity)
+    });
+    console.log(App.ipfs);
     App.converter = new showdown.Converter();
 
     const YANFManagerSimplifiedContractJSON = await $.getJSON('YANFManagerSimplified.json');
@@ -122,30 +129,29 @@ App = {
     const bufferedContent = window.IpfsHttpClient.Buffer.from(articleContent);
 
     var articleHash;
-    await App.ipfs.add(bufferedContent)
+    App.ipfs.add(bufferedContent)
       .then((value) => {
         articleHash = value[0].hash;
+        App.contracts.YANFManagerSimplified.deployed()
+          .then((instance) => {
+            return instance.publish(title, articleHash, web3.toWei(price, 'ether'),
+                {from: App.account, value: web3.toWei(1, 'finney')})
+          })
+          .then((result) => {
+            window.alert('Your article is successfully published, you can either now ' +
+            'or later reload the page to see results.');
+          })
+          .catch((error) => {
+            console.log('An error occurred during the publishing: ' + error);
+            window.alert('Sorry, your article was not published. You can contact to us, so we could help you.');
+          });
+        App.updateYanfBalance();
+        $('#publishModal').modal('hide');
       })
       .catch((error) => {
         console.log('IPFS add error: ' + error);
         window.alert('Sorry, we can not connect to the IPFS.');
       });
-
-    await App.contracts.YANFManagerSimplified.deployed()
-      .then((instance) => {
-        return instance.publish(title, articleHash, web3.toWei(price, 'ether'),
-            {from: App.account, value: web3.toWei(1, 'finney')})
-      })
-      .then((result) => {
-        window.alert('Your article is successfully published, you can either now ' +
-        'or later reload the page to see results.');
-      })
-      .catch((error) => {
-        console.log('An error occurred during the publishing: ' + error);
-        window.alert('Sorry, your article was not published. You can contact to us, so we could help you.');
-      });
-    App.updateYanfBalance();
-    $('#publishModal').modal('hide');
   },
 
   search: async () => {
