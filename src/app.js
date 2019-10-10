@@ -36,7 +36,26 @@ App = {
   },
 
   initAll: async () => {
-    App.ipfs = window.IpfsHttpClient({host: 'localhost', port: '5002', protocol: 'http'});
+    const options = {
+      repo: 'ipfs-' + Math.random(),
+      config: {
+        Addresses: {
+          //dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/
+          //'/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+          Swarm: ['/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star']
+        }
+      }
+    }
+    App.ipfs = await window.Ipfs.create();
+    App.ipfs.on('error', errorObject => console.error(errorObject));
+    App.ipfs.on('ready', () => console.log('IPFS node is ready'));
+    App.ipfs.config.get(callback=(err, config) => {
+      if (err) {
+        console.error('IPFS Config fetching error:', err);
+      }
+      console.log('IPFS Config Addresses:', config.Addresses);
+    });
+    // App.ipfs = window.IpfsHttpClient('/ip4/127.0.0.1/tcp/8080');
     App.ipfs.id((err, identity) => {
       if (err) {
         throw err
@@ -126,7 +145,7 @@ App = {
 
     console.log('Published with price ' + price);
 
-    const bufferedContent = window.IpfsHttpClient.Buffer.from(articleContent);
+    const bufferedContent = window.Ipfs.Buffer.from(articleContent);
 
     var articleHash;
     App.ipfs.add(bufferedContent)
