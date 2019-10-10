@@ -36,16 +36,6 @@ App = {
   },
 
   initAll: async () => {
-    const options = {
-      repo: 'ipfs-' + Math.random(),
-      config: {
-        Addresses: {
-          //dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/
-          //'/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
-          Swarm: ['/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star']
-        }
-      }
-    }
     App.ipfs = await window.Ipfs.create();
     App.ipfs.on('error', errorObject => console.error(errorObject));
     App.ipfs.on('ready', () => console.log('IPFS node is ready'));
@@ -55,7 +45,6 @@ App = {
       }
       console.log('IPFS Config Addresses:', config.Addresses);
     });
-    // App.ipfs = window.IpfsHttpClient('/ip4/127.0.0.1/tcp/8080');
     App.ipfs.id((err, identity) => {
       if (err) {
         throw err
